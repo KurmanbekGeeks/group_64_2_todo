@@ -9,6 +9,13 @@ def main(page: ft.Page):
     task_list = ft.Column(spacing=20)
 
 
+    def load_tasks():
+        task_list.controls.clear()
+        for task_id, task, completed in main_db.get_tasks():
+            task_list.controls.append(view_tasks(task_id=task_id, task_text=task))
+            page.update()
+
+
     def view_tasks(task_id, task_text):
         task_field = ft.TextField(read_only=True, value=task_text, expand=True)
 
@@ -47,7 +54,14 @@ def main(page: ft.Page):
 
     main_object = ft.Row([task_input, add_task_button]) 
 
-    page.add(main_object, task_list)
+    filter_buttons = ft.Row([
+        ft.ElevatedButton('Все задачи', on_click=None),
+        ft.ElevatedButton('В работе', on_click=None),
+        ft.ElevatedButton('Готово ✅', on_click=None)
+    ], alignment=ft.MainAxisAlignment.SPACE_EVENLY)
+
+    page.add(main_object, filter_buttons, task_list)
+    load_tasks()
 
 
 if __name__ == "__main__":

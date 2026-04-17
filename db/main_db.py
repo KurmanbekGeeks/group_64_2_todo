@@ -28,3 +28,13 @@ def update_task(task_id, new_task=None):
     cursor.execute(queries.update_task, (new_task, task_id))
     conn.commit()
     conn.close()
+
+
+def get_tasks():
+    conn = sqlite3.connect(path_db)
+    cursor = conn.cursor()
+    cursor.execute(queries.select_tasks)
+    tasks = cursor.fetchall()
+    conn.close()
+    return tasks 
+
